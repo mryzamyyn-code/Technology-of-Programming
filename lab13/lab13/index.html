@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<title>Коллекции JavaScript — Работа с данными</title>
+<style>
+    body { font-family: Arial; max-width: 900px; margin: 20px auto; }
+    input, button, select { padding: 6px; margin: 5px; }
+    .item { display: flex; justify-content: space-between; padding: 6px; border-bottom: 1px solid #ddd; }
+</style>
+</head>
+<body>
+
+<h2>Работа с коллекцией студентов</h2>
+
+<h3>Добавить студента</h3>
+<input id="name" placeholder="Имя">
+<input id="age" type="number" placeholder="Возраст">
+<button onclick="addStudent()">Добавить</button>
+
+<hr>
+
+<h3>Поиск</h3>
+<input id="search" placeholder="Имя или возраст">
+<button onclick="searchStudent()">Искать</button>
+
+<hr>
+
+<h3>Сортировка</h3>
+<select id="sortField">
+    <option value="name">По имени</option>
+    <option value="age">По возрасту</option>
+</select>
+<button onclick="sortStudents()">Сортировать</button>
+
+<hr>
+
+<h3>Все студенты</h3>
+<div id="list"></div>
+
+<script>
+
+
+
+let students = [];
+
+
+let studentsMap = new Map();
+
+
+let namesSet = new Set();
+
+
+function createId() {
+    return "id" + Math.random().toString(36).slice(2);
+}
+
+
+
+function render(list = students) {
+    document.getElementById("list").innerHTML = "";
+
+    list.forEach(student => {
+        const div = document.createElement("div");
+        div.className = "item";
+        div.innerHTML = `
+            <span>${student.name} — ${student.age} лет</span>
+            <button onclick="removeStudent('${student.id}')">Удалить</button>
+        `;
+        document.getElementById("list").appendChild(div);
+    });
+}
+
+
+
+function addStudent() {
+    const name = document.getElementById("name").value.trim();
+    const age = Number(document.getElementById("age").value);
+
+    if (!name || !age) {
+        alert("Введите имя и возраст!");
+        return;
+    }
+
+    
+    if (namesSet.has(name)) {
+        alert("Студент с таким именем уже существует!");
+        return;
+    }
+
+    const id = createId();
+
+    const student = { id, name, age }; 
+
+    students.push(student);  
+    studentsMap.set(id, student); 
+    namesSet.add(name); 
+
+    render();
+}
+
+
+
+function removeStudent(id) {
+    const student = studentsMap.get(id);
+
+    if (!student) return;
+
+    
+    students = students.filter(s => s.id !== id);
+    studentsMap.delete(id);
+    namesSet.delete(student.name);
+
+    render();
+}
+
+
+
+function searchStudent() {
+    const query = document.getElementById("search").value.toLowerCase();
+
+    const results = students.filter(s =>
+        s.name.toLowerCase().includes(query) ||
+        String(s.age).includes(query)
+    );
+
+    render(results);
+}
+
+
+
+function sortStudents() {
+    const field = document.getElementById("sortField").value;
+
+    students.sort((a, b) => {
+        if (typeof a[field] === "string")
+            return a[field].localeCompare(b[field]);
+        return a[field] - b[field];
+    });
+
+    render();
+}
+
+
+render();
+</script>
+
+</body>
+</html>
