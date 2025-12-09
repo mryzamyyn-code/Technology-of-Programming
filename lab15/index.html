@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Система учёта студентов</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<h1>Учёт студентов</h1>
+
+<form id="student-form">
+    <input type="text" id="name" placeholder="Имя" required>
+    <input type="number" id="age" placeholder="Возраст" required>
+    <input type="text" id="group" placeholder="Группа" required>
+    <button type="button" id="add-btn">Добавить</button>
+</form>
+
+<div class="search-section">
+    <input type="text" id="search" placeholder="Введите имя для поиска…">
+    <button type="button" id="search-btn">Найти студента</button>
+</div>
+
+<h3>Результаты поиска:</h3>
+<ul id="search-results"></ul>
+
+<h3>Список всех студентов:</h3>
+<ul id="student-list"></ul>
+
+<script src="storage.js"></script>
+<script src="utils.js"></script>
+<script src="ui.js"></script>
+<script src="main.js"></script>
+
+</body>
+</html>
